@@ -155,6 +155,13 @@ player.chromecast(); // initializes the Chromecast plugin
   session is active and connected. When the this plugin calls the `requestSubtitleFn`, it
   passes it the [current `source` object][player-source] and expects a string in return.
   If nothing is returned or if this option is not defined, no sub-title will be shown.
+* **`chromecast.requestCustomDataFn`** - a function that this plugin calls when it needs an
+  object that contains custom information necessary for a Chromecast receiver app when a
+  session is active and connected. When the this plugin calls the `requestCustomDataFn`, it
+  passes it the [current `source` object][player-source] and expects an object in return.
+  If nothing is returned or if this option is not defined, no custom data will be sent.
+  This option is intended to be used with a [custom receiver][custom-receiver] application
+  to extend its default capabilities.
 
 Here is an example configuration object that makes full use of all required and optional
 configuration:
@@ -172,6 +179,11 @@ subtitles = {
    'https://example.com/videos/video-2.mp4': 'Subtitle2',
 };
 
+customdata = {
+   'https://example.com/videos/video-1.mp4': {'customColor': '#0099ee'},
+   'https://example.com/videos/video-2.mp4': {'customColor': '#000080'},
+};
+
 options = {
    // Must specify the 'chromecast' Tech first
    techOrder: [ 'chromecast', 'html5' ], // Required
@@ -182,6 +194,9 @@ options = {
       },
       requestSubtitleFn: function(source) { // Not required
          return subtitles[source.url];
+      },
+      requestCustomDataFn: function(source) { // Not required
+         return customdata[source.url];
       }
    },
    plugins: {
@@ -290,4 +305,5 @@ details.
 [cast-receiver]: https://developers.google.com/cast/docs/receiver_apps
 [def-cast-id]: https://developers.google.com/cast/docs/receiver_apps#default
 [player-source]: http://docs.videojs.com/Player.html#currentSource
+[custom-receiver]: https://developers.google.com/cast/docs/custom_receiver
 [contributing]: https://github.com/silvermine/silvermine-info#contributing
